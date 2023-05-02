@@ -1,0 +1,40 @@
+.input-bg {
+    background-color: #212121;
+    height: 50px;
+    .input-container {
+        display: flex;
+        justify-content: center;
+        height: auto;
+        form {
+            display: flex;
+            height: 40px;
+            border: solid 1px #727272;
+            border-radius: 20px 0 0 20px;
+            &:focus-within {
+                border: solid 1px white;
+            }
+            .search-input-style {
+                width: fit-content;
+                height: 100%;
+                input {
+                    height: 100%;
+                    border: none;
+                    border-radius: 20px 0 0 20px;
+                    padding-left: 20px;
+                    background: transparent;
+                    color: white;
+                    &::placeholder {
+                        font-size: 12px;
+                    }
+                    &:focus {
+                        outline: none;
+                    }
+                }
+            }
+            .search-clear-btn-style {
+                width: 40px;
+                height: 100%;
+            }
+        }
+    }
+}

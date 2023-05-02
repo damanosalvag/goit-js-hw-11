@@ -1,0 +1,15 @@
+.clear-btn {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: transparent;
+    &__svg-container {
+        svg {
+            width: 24px;
+            height: 24px;
+            path {
+                fill: white;
+            }
+        }
+    }
+}

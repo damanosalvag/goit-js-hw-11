@@ -1,0 +1,20 @@
+.input-searcher-btn {
+    width: 50px;
+    height: 40px;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    border: solid 1px #727272;
+    border-left: solid 1px #a9a9a9;
+    background: #333333;
+    &__svg-container {
+        height: 100%;
+        width: 100%;
+        svg {
+            width: 24px;
+            height: 24px;
+            path {
+                fill: white;
+            }
+        }
+    }
+}
