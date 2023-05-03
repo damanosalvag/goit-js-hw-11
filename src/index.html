@@ -12,10 +12,10 @@
       <div class="input-container">
         <form id="search-form" class="search-form-style">
           <div id="search-input" class="search-input-style">
-            <input id="search" type="text" placeholder="BUSCAR" autofocus>
+            <input name="searchQuery" autocomplete="off" id="search" type="text" placeholder="Search images..." autofocus>
           </div>
           <div id="search-clear-btn" class="search-clear-btn-style">
-            <button class="clear-btn">
+            <button id="clear-btn" class="clear-btn">
               <div class="clear-btn__svg-container icon-center">
                 <svg viewBox="0 0 24 24" focusable="false">
                   <g class="style-scope">
@@ -26,7 +26,7 @@
             </button>
           </div>
         </form>
-        <button id="search-icon-legacy" class="input-searcher-btn">
+        <button type="submit" id="search-btn" class="input-searcher-btn">
           <div class="input-searcher-btn__svg-container icon-center">
             <svg viewBox="0 0 24 24" class="searcher-scope-icon">
               <g class="style-scope">
@@ -38,6 +38,8 @@
         </button>
       </div>
     </div>
-    <include src="./partials/example.html"></include>
+    <div id="gallery" class="gallery">
+    </div>
+    <button type="button" class="load-more">Loard more</button>
   </body>
 </html>
