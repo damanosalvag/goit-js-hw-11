@@ -1,0 +1,14 @@
+.footer-more {
+    visibility:hidden;
+    height: 50px;
+    background: #212121;
+    .load-more {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        height: 40px;
+        background: #333;
+        border: 1px solid #727272;
+        border-radius: 20px;
+        color: white;
+    }
+}

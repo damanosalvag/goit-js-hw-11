@@ -6,17 +6,21 @@ const inputTextbox = document.querySelector('#search');
 const onSearchBtn = document.querySelector('#search-btn');
 const onClearBtn = document.querySelector('#clear-btn');
 const gallery = document.querySelector('#gallery');
+const footerMore = document.querySelector('.footer-more');
+const buttonMore = document.querySelector('#load-more-btn');
+let pgMore = 1, totalHitsRender=0;
+
 
 // render pictures
-function renderPost(posts) {
+function renderPost(posts, page) {
     const { total, totalHits, hits } = posts.data;
     const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
         return `
-        <div class="photo-card">
+        <figure class="photo-card">
             <a class="photo-large" href="${largeImageURL}">
-                <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+                <img class='gallery__image' src="${webformatURL}" alt="${tags}" loading="lazy" />
             </a>
-            <div class="info">
+            <figcaption class="info">
                 <p class="info-item">
                     <b>Likes</b><br>
                     ${likes}
@@ -33,17 +37,54 @@ function renderPost(posts) {
                     <b>Downloads</b><br>
                     ${downloads}
                 </p>
-             </div>
-        </div>`
+             </figcaption>
+        </figure>`
     }).join(' ');
-    gallery.insertAdjacentHTML('beforeend', markup);
+    try {
+        if (page === 1) {
+            gallery.innerHTML = markup;
+            Notiflix.Notify.success(`Hooray! We found ${total} images, but only we can only show you ${totalHits}`)
+            totalHitsRender = 40;
+            pgMore = 1;
+        } else if (page > 1 && totalHitsRender <= totalHits) {
+            gallery.insertAdjacentHTML('beforeend', markup);
+            totalHitsRender = page * 40;
+        };    
+    }
+    catch {
+        Notiflix.Notify.warning("We have reached the limit of images we can show you, subscribe to expand your limit!");
+    }
 };
+// On clear button
+inputTextbox.addEventListener('input', () => {
+    if (inputTextbox.value === '') {
+        onClearBtn.style.visibility = 'hidden';
+    } else {
+        onClearBtn.style.visibility = 'visible';
+    };
+});
 
 // get the object array of photos API
-onSearchBtn.addEventListener('click', async() => {
-    let page = 1;
+onSearchBtn.addEventListener('click', async () => {
+    const page = 1;
     const posts = await getPictures(inputTextbox.value.trim(), page);
-    renderPost(posts);
-    const gallerySimple = new simpleLightbox('.gallery a');
-    gallerySimple.on('show.simplelightbox', () => { console.log('Image is shown'); });
+    renderPost(posts, page);
+    const gallerySimple_1 = new simpleLightbox('.gallery a');
+    gallerySimple_1.on('show.simplelightbox', () => { console.log('Image is shown'); });
+    footerMore.style.visibility = 'visible';
+});
+
+// get more pictures
+buttonMore.addEventListener('click', async () => {
+    pgMore += 1;
+    const postsMore = await getPictures(inputTextbox.value.trim(), pgMore);
+    renderPost(postsMore, pgMore);
+    const gallerySimple_2 = new simpleLightbox('.gallery a');
+    gallerySimple_2.on('show.simplelightbox', () => { console.log('Image is shown'); });
+});
+
+// cleaning the textbox
+onClearBtn.addEventListener('click', () => {
+    inputTextbox.value = '';
 })
+
