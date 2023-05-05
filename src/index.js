@@ -8,51 +8,64 @@ const onClearBtn = document.querySelector('#clear-btn');
 const gallery = document.querySelector('#gallery');
 const footerMore = document.querySelector('.footer-more');
 const buttonMore = document.querySelector('#load-more-btn');
-let pgMore = 1, totalHitsRender=0;
+let pgMore = 1, totalHitsRender=0, heightCard=0;
 
 
 // render pictures
 function renderPost(posts, page) {
-    const { total, totalHits, hits } = posts.data;
-    const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
-        return `
-        <figure class="photo-card">
-            <a class="photo-large" href="${largeImageURL}">
-                <img class='gallery__image' src="${webformatURL}" alt="${tags}" loading="lazy" />
-            </a>
-            <figcaption class="info">
-                <p class="info-item">
-                    <b>Likes</b><br>
-                    ${likes}
-                </p>
-                <p class="info-item">
-                    <b>Views</b><br>
-                    ${views}
-                </p>
-                <p class="info-item">
-                    <b>Comments</b><br>
-                    ${comments}
-                </p>
-                <p class="info-item">
-                    <b>Downloads</b><br>
-                    ${downloads}
-                </p>
-             </figcaption>
-        </figure>`
-    }).join(' ');
     try {
-        if (page === 1) {
+        const { total, totalHits, hits } = posts.data;
+        const markup = hits.map(({ webformatURL, largeImageURL, tags, likes, views, comments, downloads }) => {
+            return `
+            <figure class="photo-card">
+                <a class="photo-large" href="${largeImageURL}">
+                    <img class='gallery__image' src="${webformatURL}" alt="${tags}" loading="lazy" />
+                </a>
+                <figcaption class="info">
+                    <p class="info-item">
+                        <b>Likes</b><br>
+                        ${likes}
+                    </p>
+                    <p class="info-item">
+                        <b>Views</b><br>
+                        ${views}
+                    </p>
+                    <p class="info-item">
+                        <b>Comments</b><br>
+                        ${comments}
+                    </p>
+                    <p class="info-item">
+                        <b>Downloads</b><br>
+                        ${downloads}
+                    </p>
+                 </figcaption>
+            </figure>`
+        }).join(' ');    
+        if (page === 1 && totalHits > 0) {
             gallery.innerHTML = markup;
-            Notiflix.Notify.success(`Hooray! We found ${total} images, but only we can only show you ${totalHits}`)
-            totalHitsRender = 40;
+            const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
+            heightCard = cardHeight;
+            Notiflix.Notify.success(`Hooray! We found ${total} images, but only we can only show you ${totalHits}`);
             pgMore = 1;
-        } else if (page > 1 && totalHitsRender <= totalHits) {
+            footerMore.style.visibility = 'visible';
+            window.scrollBy({
+                top: cardHeight * 2,
+                behavior: "smooth",
+            });
+        } else if (page > 1 && totalHits > 0) {
             gallery.insertAdjacentHTML('beforeend', markup);
-            totalHitsRender = page * 40;
+            window.scrollBy({
+                top: heightCard * 2,
+                behavior: "smooth",
+            });
+        } else {
+            Notiflix.Notify.info("No found hits");
+            let validate = footerMore.style.visibility = 'visible' ? 'hidden' : 'visible';
+            return footerMore.style.visibility = validate;
         };    
     }
     catch {
-        Notiflix.Notify.warning("We have reached the limit of images we can show you, subscribe to expand your limit!");
+        return
     }
 };
 // On clear button
@@ -71,7 +84,6 @@ onSearchBtn.addEventListener('click', async () => {
     renderPost(posts, page);
     const gallerySimple_1 = new simpleLightbox('.gallery a');
     gallerySimple_1.on('show.simplelightbox', () => { console.log('Image is shown'); });
-    footerMore.style.visibility = 'visible';
 });
 
 // get more pictures
@@ -86,5 +98,5 @@ buttonMore.addEventListener('click', async () => {
 // cleaning the textbox
 onClearBtn.addEventListener('click', () => {
     inputTextbox.value = '';
-})
+});
 
