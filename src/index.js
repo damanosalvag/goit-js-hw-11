@@ -79,20 +79,35 @@ inputTextbox.addEventListener('input', () => {
 
 // get the object array of photos API
 onSearchBtn.addEventListener('click', async () => {
-    const page = 1;
-    const posts = await getPictures(inputTextbox.value.trim(), page);
-    renderPost(posts, page);
-    const gallerySimple_1 = new simpleLightbox('.gallery a');
-    gallerySimple_1.on('show.simplelightbox', () => { console.log('Image is shown'); });
+    if (inputTextbox.value != '') {
+        const page = 1;
+        const posts = await getPictures(inputTextbox.value.trim(), page);
+        renderPost(posts, page);
+        const gallerySimple_1 = new simpleLightbox('.gallery a');
+        gallerySimple_1.on('show.simplelightbox', () => { console.log('Image is shown'); });       
+    } else {
+        return window.alert('Please write something!');
+    }
+});
+// get the object array of photos API, if keydwon intro
+inputTextbox.addEventListener('keydown', (event) => {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        onSearchBtn.click();
+    }
 });
 
 // get more pictures
 buttonMore.addEventListener('click', async () => {
-    pgMore += 1;
-    const postsMore = await getPictures(inputTextbox.value.trim(), pgMore);
-    renderPost(postsMore, pgMore);
-    const gallerySimple_2 = new simpleLightbox('.gallery a');
-    gallerySimple_2.on('show.simplelightbox', () => { console.log('Image is shown'); });
+    if (inputTextbox.value != '') {
+        pgMore += 1;
+        const postsMore = await getPictures(inputTextbox.value.trim(), pgMore);
+        renderPost(postsMore, pgMore);
+        const gallerySimple_2 = new simpleLightbox('.gallery a');
+        gallerySimple_2.on('show.simplelightbox', () => { console.log('Image is shown'); });       
+    } else {
+        return window.alert('Please write something!');
+    };
 });
 
 // cleaning the textbox
