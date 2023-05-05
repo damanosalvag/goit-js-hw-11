@@ -8,7 +8,10 @@ const onClearBtn = document.querySelector('#clear-btn');
 const gallery = document.querySelector('#gallery');
 const footerMore = document.querySelector('.footer-more');
 const buttonMore = document.querySelector('#load-more-btn');
-let pgMore = 1, totalHitsRender=0, heightCard=0;
+let pgMore = 1, heightCard = 0;
+
+const gallerySimple = new simpleLightbox('.gallery a');
+gallerySimple.on('show.simplelightbox', () => { console.log('Image is shown'); });
 
 
 // render pictures
@@ -62,7 +65,8 @@ function renderPost(posts, page) {
             Notiflix.Notify.info("No found hits");
             let validate = footerMore.style.visibility = 'visible' ? 'hidden' : 'visible';
             return footerMore.style.visibility = validate;
-        };    
+        }; 
+        gallerySimple.refresh();
     }
     catch {
         return
@@ -82,9 +86,7 @@ onSearchBtn.addEventListener('click', async () => {
     if (inputTextbox.value != '') {
         const page = 1;
         const posts = await getPictures(inputTextbox.value.trim(), page);
-        renderPost(posts, page);
-        const gallerySimple_1 = new simpleLightbox('.gallery a');
-        gallerySimple_1.on('show.simplelightbox', () => { console.log('Image is shown'); });       
+        renderPost(posts, page);       
     } else {
         return window.alert('Please write something!');
     }
@@ -102,9 +104,7 @@ buttonMore.addEventListener('click', async () => {
     if (inputTextbox.value != '') {
         pgMore += 1;
         const postsMore = await getPictures(inputTextbox.value.trim(), pgMore);
-        renderPost(postsMore, pgMore);
-        const gallerySimple_2 = new simpleLightbox('.gallery a');
-        gallerySimple_2.on('show.simplelightbox', () => { console.log('Image is shown'); });       
+        renderPost(postsMore, pgMore);      
     } else {
         return window.alert('Please write something!');
     };
